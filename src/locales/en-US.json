@@ -1,0 +1,8 @@
+{
+  "jsonQuery": {
+    "title": "JSON Query",
+    "engine": "Parsing Engine",
+    "expression": "Parsing Expression",
+    "propertiesMapping": "Properties Mapping"
+  }
+}
