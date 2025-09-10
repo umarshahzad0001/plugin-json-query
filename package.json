@@ -1,0 +1,11 @@
+{
+  "name": "@your-org/plugin-json-query",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "jsonata": "^2.0.5",
+    "jmespath": "^0.16.0",
+    "jsonpath-plus": "^8.1.0"
+  }
+}
