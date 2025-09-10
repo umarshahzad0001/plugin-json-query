@@ -1,0 +1,44 @@
+import { WorkflowNode } from '@nocobase/plugin-workflow';
+import jmespath from 'jmespath';
+import { JSONPath } from 'jsonpath-plus';
+import jsonata from 'jsonata';
+
+export default class JsonQueryNode extends WorkflowNode {
+  static type = 'jsonQuery';
+  static title = 'JSON Query';
+
+  async run(input: any, context: any) {
+    const { engine, expression, propertiesMapping } = this.config || {};
+    const data = input;
+
+    let result: any;
+
+    switch (engine) {
+      case 'jmespath':
+        result = jmespath.search(data, expression);
+        break;
+      case 'jsonpath':
+        result = JSONPath({ path: expression, json: data });
+        break;
+      case 'jsonata':
+        const exp = jsonata(expression);
+        result = await exp.evaluate(data, context);
+        break;
+      default:
+        throw new Error(`Unknown engine: ${engine}`);
+    }
+
+    // Apply properties mapping
+    if (propertiesMapping && Array.isArray(result)) {
+      result = result.map((item: any) => {
+        const mapped: any = {};
+        for (const key in propertiesMapping) {
+          mapped[key] = item[propertiesMapping[key]];
+        }
+        return mapped;
+      });
+    }
+
+    return result;
+  }
+}
